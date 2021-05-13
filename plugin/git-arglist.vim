@@ -7,6 +7,16 @@ if exists("g:loaded_git_arglist")
 endif
 let g:loaded_git_arglist = 1
 
+function! s:Git(git_args)
+  let l:result_lines = systemlist("git " . a:git_args)
+  if v:shell_error != 0
+    echo l:result_lines
+    sleep 5
+    throw "Git exited with non-zero exit code."
+  endif
+  return l:result_lines
+endfunction
+
 function! s:InGitRepo()
   call system("git rev-parse HEAD >/dev/null 2>&1")
   return v:shell_error == 0
@@ -19,8 +29,8 @@ function! s:SetArglistToTreeish(arglist_cmd, treeish, pathspec)
     return
   endif
 
-  let l:arglist = systemlist(
-        \ "git diff-tree "
+  let l:arglist = s:Git(
+        \ "diff-tree "
         \ . g:diff_tree_git_flags . " "
         \ . "'" . a:treeish . "' "
         \ . "-- "
@@ -36,8 +46,8 @@ function! s:SetArglistToDiff(arglist_cmd, pathspec)
     return
   endif
 
-  let l:arglist = systemlist(
-        \ "git diff "
+  let l:arglist = s:Git(
+        \ "diff "
         \ . g:diff_git_flags . " "
         \ . "-- "
         \ . join(a:pathspec, " "))
@@ -52,8 +62,8 @@ function! s:SetArglistToStage(arglist_cmd, pathspec)
     return
   endif
 
-  let l:arglist = systemlist(
-        \ "git diff "
+  let l:arglist = s:Git(
+        \ "diff "
         \ . g:stage_git_flags . " "
         \ . "-- "
         \ . join(a:pathspec, " "))
@@ -65,7 +75,12 @@ function! s:ArgsTreeish(...)
   let l:treeish = get(a:, 1, "HEAD")
   let l:pathspec = a:000[1:]
   let l:arglist_cmd = "args"
-  call s:SetArglistToTreeish(l:arglist_cmd, l:treeish, l:pathspec)
+
+  try
+    call s:SetArglistToTreeish(l:arglist_cmd, l:treeish, l:pathspec)
+  catch /.*/
+    echohl ErrorMsg | echo "Caught error: " . v:exception | echohl None
+  endtry
 endfunction
 
 function! s:ArglTreeish(...)
@@ -99,13 +114,44 @@ function! s:ArglStage(...)
   call s:SetArglistToStage(l:arglist_cmd, l:pathspec)
 endfunction
 
+function! s:ErrWrapper(...)
+  if !s:InGitRepo()
+    echohl ErrorMsg | echo "Not in a git repo!" | echohl None
+    return
+  endif
+
+  let l:GitFunction = a:1
+  let l:args = a:000[1:]
+  try
+    call call(l:GitFunction, l:args)
+  catch /.*/
+    echohl ErrorMsg | echo "Caught error: " . v:exception | echohl None
+  endtry
+endfunction
+
 function! s:CompleteGitBranch(A, L, P)
-  let l:branches = systemlist(
-        \ "git branch -a"
-        \ . " | sed 's/^\*/ /'"
-        \ . " | awk '{print $1}'")
-  call filter(l:branches, "v:val =~ a:A")
+  try
+    let l:branches = s:Git("branch -a")
+  catch /.*/
+    return []
+  endtry
+
+  " The magic below demangles the Git output.
+  " Something like this:
+  "     * master
+  "       remotes/origin/HEAD -> origin/master
+  "       remotes/origin/master
+  "
+  " becomes:
+  "     master
+  "     origin/HEAD
+  "     origin/master
+  call map(l:branches, "substitute(v:val, '^*', ' ', '')")
+  call map(l:branches, "substitute(v:val, '\\s*\\(\\S\\+\\).*', '\\1', '')")
   call map(l:branches, "substitute(v:val, '^remotes/', '', '')")
+
+  " Then filter by what the user asked for.
+  call filter(l:branches, "v:val =~ a:A")
   return l:branches
 endfunction
 
@@ -121,22 +167,22 @@ function! s:CompleteArgxTreeish(A, L, P)
 endfunction
 
 if !exists(":ArgsTreeish")
-  command! -nargs=* -complete=customlist,s:CompleteArgxTreeish ArgsTreeish :call s:ArgsTreeish(<f-args>)
+  command! -nargs=* -complete=customlist,s:CompleteArgxTreeish ArgsTreeish :call s:ErrWrapper("s:ArgsTreeish", <f-args>)
 endif
 if !exists(":ArglTreeish")
-  command! -nargs=* -complete=customlist,s:CompleteArgxTreeish ArglTreeish :call s:ArglTreeish(<f-args>)
+  command! -nargs=* -complete=customlist,s:CompleteArgxTreeish ArglTreeish :call s:ErrWrapper("s:ArglTreeish", <f-args>)
 endif
 
 if !exists(":ArgsDiff")
-  command! -nargs=* -complete=file ArgsDiff :call s:ArgsDiff(<f-args>)
+  command! -nargs=* -complete=file ArgsDiff :call s:ErrWrapper("s:ArgsDiff", <f-args>)
 endif
 if !exists(":ArglDiff")
-  command! -nargs=* -complete=file ArglDiff :call s:ArglDiff(<f-args>)
+  command! -nargs=* -complete=file ArglDiff :call s:ErrWrapper("s:ArglDiff", <f-args>)
 endif
 
 if !exists(":ArgsStage")
-  command! -nargs=* -complete=file ArgsStage :call s:ArgsStage(<f-args>)
+  command! -nargs=* -complete=file ArgsStage :call s:ErrWrapper("s:ArgsStage", <f-args>)
 endif
 if !exists(":ArglStage")
-  command! -nargs=* -complete=file ArglStage :call s:ArglStage(<f-args>)
+  command! -nargs=* -complete=file ArglStage :call s:ErrWrapper("s:ArglStage", <f-args>)
 endif
