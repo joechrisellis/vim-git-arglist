@@ -39,6 +39,12 @@ modify it.
 Delete the files described by {pathspec} that are created/modified by
 {treeish} (with respect to its parent) from the arglist.
 
+                                                *:ArgEditTreeish*
+:ArgEditTreeish[!] {treeish} {pathspec}
+
+Add the files described by {pathspec} that are created/modified by {treeish}
+(with respect to its parent) to the arglist and edit them.
+
 
                                                 *:ArgsDiff*
 :ArgsDiff[!] {pathspec}
@@ -66,6 +72,12 @@ but add to the arglist rather than modify it.
 
 Delete the files described by {pathspec} that are modified in the working tree
 from the arglist.
+
+                                                *:ArgEditDiff*
+:ArgEditDiff[!] {pathspec}
+
+Add the files described by {pathspec} that are modified in the working tree to
+the arglist and edit them.
 
 
                                                 *:ArgsUntracked*
@@ -96,6 +108,11 @@ lives inside your Git tree!
 
 Delete the untracked files described by {pathspec} from the arglist.
 
+                                                *:ArgEditUntracked*
+:ArgEditUntracked[!] {pathspec}
+
+Add the untracked files described by {pathspec} to the arglist and edit them.
+
 
                                                 *:ArgsStage*
 :ArgsStage[!] {pathspec}
@@ -123,6 +140,12 @@ but add to the arglist rather than modifying it.
 
 Delete the files described by {pathspec} that are modified in the stage from
 the arglist.
+
+                                                *:ArgEditStage*
+:ArgEditStage[!] {pathspec}
+
+Add the files described by {pathspec} that are modified in the stage to the
+arglist and edit them.
 
 EXAMPLE WORKFLOW                                *git-arglist-example-workflow*
 
