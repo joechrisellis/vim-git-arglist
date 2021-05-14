@@ -151,7 +151,7 @@ function! s:GetCompletion(action)
   endif
 endfunction
 
-for s:args_cmd in ["Args", "Argl", "ArgAdd"]
+for s:args_cmd in ["Args", "Argl", "ArgAdd", "ArgDelete"]
   for s:action in ["Treeish", "Diff", "Untracked", "Stage"]
     let s:new_cmd = s:args_cmd . s:action
     let s:new_cmd_completion = s:GetCompletion(s:action)
