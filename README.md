@@ -1,11 +1,11 @@
 # vim-git-arglist
 
-A plugin which adds helper commands for modifying the arglist based on the
+A plugin which adds helper commands for manipulating the arglist based on the
 current Git repository.
 
 Vi/Vim's arglist is useful for grouping together a collection of files for easy
 navigation. This plugin adds helper commands that interface with Git for
-setting the arglist based on the repository you're working with.
+manipulating the arglist based on the repository you're working with.
 
 As a quick example, you can add all of the files modified/added by a particular
 commit to the arglist with `:ArgsTreeish <commit_hash>`. Or, you can add all of
