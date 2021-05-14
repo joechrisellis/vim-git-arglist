@@ -143,18 +143,20 @@ function! s:CompleteArgxTreeish(A, L, P)
   endif
 endfunction
 
-if !exists(":ArgsTreeish")
-  command! -nargs=* -complete=customlist,s:CompleteArgxTreeish ArgsTreeish :call s:ErrWrapper("s:Treeish", "args", <f-args>)
-endif
-if !exists(":ArglTreeish")
-  command! -nargs=* -complete=customlist,s:CompleteArgxTreeish ArglTreeish :call s:ErrWrapper("s:Treeish", "argl", <f-args>)
-endif
+function! s:GetCompletion(action)
+  if a:action ==# "Treeish"
+    return "customlist,s:CompleteArgxTreeish"
+  else
+    return "file"
+  endif
+endfunction
 
 for s:args_cmd in ["Args", "Argl"]
-  for s:action in ["Diff", "Untracked", "Stage"]
+  for s:action in ["Treeish", "Diff", "Untracked", "Stage"]
     let s:new_cmd = s:args_cmd . s:action
+    let s:new_cmd_completion = s:GetCompletion(s:action)
     if !exists(":" . s:new_cmd)
-      exe "command! -nargs=* -complete=file " . s:new_cmd . " :call s:ErrWrapper('s:" . s:action . "', '" . tolower(s:args_cmd) . "', <f-args>)"
+      exe "command! -nargs=* -complete=" . s:new_cmd_completion . " " . s:new_cmd . " :call s:ErrWrapper('s:" . s:action . "', '" . tolower(s:args_cmd) . "', <f-args>)"
     endif
   endfor
 endfor
