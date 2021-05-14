@@ -10,8 +10,6 @@ let g:loaded_git_arglist = 1
 function! s:Git(git_args)
   let l:result_lines = systemlist("git " . a:git_args)
   if v:shell_error != 0
-    echo l:result_lines
-    sleep 5
     throw "Git exited with non-zero exit code."
   endif
   return l:result_lines
@@ -24,11 +22,6 @@ endfunction
 
 let g:diff_tree_git_flags = "-m --no-commit-id --name-only --diff-filter d -r"
 function! s:SetArglistToTreeish(arglist_cmd, treeish, pathspec)
-  if !s:InGitRepo()
-    echohl ErrorMsg | echo "Not in a git repo!" | echohl None
-    return
-  endif
-
   let l:arglist = s:Git(
         \ "diff-tree "
         \ . g:diff_tree_git_flags . " "
@@ -41,11 +34,6 @@ endfunction
 
 let g:diff_git_flags = "--name-only --diff-filter d"
 function! s:SetArglistToDiff(arglist_cmd, pathspec)
-  if !s:InGitRepo()
-    echohl ErrorMsg | echo "Not in a git repo!" | echohl None
-    return
-  endif
-
   let l:arglist = s:Git(
         \ "diff "
         \ . g:diff_git_flags . " "
@@ -57,11 +45,6 @@ endfunction
 
 let g:untracked_git_flags = "--others --exclude-standard"
 function! s:SetArglistToUntracked(arglist_cmd, pathspec)
-  if !s:InGitRepo()
-    echohl ErrorMsg | echo "Not in a git repo!" | echohl None
-    return
-  endif
-
   let l:arglist = s:Git(
         \ "ls-files "
         \ . g:untracked_git_flags . " "
@@ -73,11 +56,6 @@ endfunction
 
 let g:stage_git_flags = "--cached --name-only --diff-filter d"
 function! s:SetArglistToStage(arglist_cmd, pathspec)
-  if !s:InGitRepo()
-    echohl ErrorMsg | echo "Not in a git repo!" | echohl None
-    return
-  endif
-
   let l:arglist = s:Git(
         \ "diff "
         \ . g:stage_git_flags . " "
@@ -92,11 +70,7 @@ function! s:ArgsTreeish(...)
   let l:pathspec = a:000[1:]
   let l:arglist_cmd = "args"
 
-  try
-    call s:SetArglistToTreeish(l:arglist_cmd, l:treeish, l:pathspec)
-  catch /.*/
-    echohl ErrorMsg | echo "Caught error: " . v:exception | echohl None
-  endtry
+  call s:SetArglistToTreeish(l:arglist_cmd, l:treeish, l:pathspec)
 endfunction
 
 function! s:ArglTreeish(...)
