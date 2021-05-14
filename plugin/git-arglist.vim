@@ -55,6 +55,22 @@ function! s:SetArglistToDiff(arglist_cmd, pathspec)
   exe a:arglist_cmd . " " . join(l:arglist, " ")
 endfunction
 
+let g:untracked_git_flags = "--others --exclude-standard"
+function! s:SetArglistToUntracked(arglist_cmd, pathspec)
+  if !s:InGitRepo()
+    echohl ErrorMsg | echo "Not in a git repo!" | echohl None
+    return
+  endif
+
+  let l:arglist = s:Git(
+        \ "ls-files "
+        \ . g:untracked_git_flags . " "
+        \ . "-- "
+        \ . join(a:pathspec, " "))
+
+  exe a:arglist_cmd . " " . join(l:arglist, " ")
+endfunction
+
 let g:stage_git_flags = "--cached --name-only --diff-filter d"
 function! s:SetArglistToStage(arglist_cmd, pathspec)
   if !s:InGitRepo()
@@ -100,6 +116,18 @@ function! s:ArglDiff(...)
   let l:pathspec = a:000
   let l:arglist_cmd = "argl"
   call s:SetArglistToDiff(l:arglist_cmd, l:pathspec)
+endfunction
+
+function! s:ArgsUntracked(...)
+  let l:pathspec = a:000
+  let l:arglist_cmd = "args"
+  call s:SetArglistToUntracked(l:arglist_cmd, l:pathspec)
+endfunction
+
+function! s:ArglUntracked(...)
+  let l:pathspec = a:000
+  let l:arglist_cmd = "argl"
+  call s:SetArglistToUntracked(l:arglist_cmd, l:pathspec)
 endfunction
 
 function! s:ArgsStage(...)
@@ -178,6 +206,13 @@ if !exists(":ArgsDiff")
 endif
 if !exists(":ArglDiff")
   command! -nargs=* -complete=file ArglDiff :call s:ErrWrapper("s:ArglDiff", <f-args>)
+endif
+
+if !exists(":ArgsUntracked")
+  command! -nargs=* -complete=file ArgsUntracked :call s:ErrWrapper("s:ArgsUntracked", <f-args>)
+endif
+if !exists(":ArglUntracked")
+  command! -nargs=* -complete=file ArglUntracked :call s:ErrWrapper("s:ArglUntracked", <f-args>)
 endif
 
 if !exists(":ArgsStage")
