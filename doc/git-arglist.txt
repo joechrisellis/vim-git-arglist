@@ -33,6 +33,7 @@ Add the files described by {pathspec} that are created/modified by {treeish}
 as |:ArgsTreeish| and |:ArglTreeish|, but add to the arglist rather than
 modify it.
 
+
                                                 *:ArgsDiff*
 :ArgsDiff {pathspec}
 
@@ -53,6 +54,7 @@ Same as |:ArgsDiff|, but use the local arglist.
 Add the files described by {pathspec} that are modified in the working tree to
 the arglist. In other words, do the same thing as |:ArgsDiff| and |:ArglDiff|,
 but add to the arglist rather than modify it.
+
 
                                                 *:ArgsUntracked*
 :ArgsUntracked {pathspec}
@@ -76,6 +78,7 @@ Add the untracked files described by {pathspec} to the arglist. In other
 words, do the same thing as |:ArgsUntracked| and |:ArglUntracked|, but add to
 the arglist rather than modify it. Use with caution if your build directory
 lives inside your Git tree!
+
 
                                                 *:ArgsStage*
 :ArgsStage {pathspec}
