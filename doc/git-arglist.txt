@@ -39,6 +39,21 @@ be added to the arglist.
 
 Same as |:ArgsDiff|, but use the local arglist.
 
+                                                *:ArgsUntracked*
+:ArgsUntracked {pathspec}
+
+Set the arglist to the untracked files described by {pathspec}.
+
+{pathspec} may be omitted. If {pathspec} is omitted all untracked files will
+be added to the arglist. Use with caution if your build directory lives inside
+your Git tree!
+
+                                                *:ArglUntracked*
+:ArglUntracked {pathspec}
+
+Same as |:ArglUntracked|, but use the local arglist. Use with caution if your
+build directory lives inside your Git tree!
+
                                                 *:ArgsStage*
 :ArgsStage {pathspec}
 
