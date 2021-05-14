@@ -11,7 +11,7 @@ current Git repository.
 COMMANDS                                        *git-arglist-commands*
 
                                                 *:ArgsTreeish*
-:ArgsTreeish {treeish} {pathspec}
+:ArgsTreeish[!] {treeish} {pathspec}
 
 Set the arglist to the files described by {pathspec} that are created/modified
 by {treeish} (with respect to its parent).
@@ -21,7 +21,7 @@ will be used. If {pathspec} is omitted, all created/modified files will be
 added to the arglist.
 
                                                 *:ArglTreeish*
-:ArglTreeish {treeish} {pathspec}
+:ArglTreeish[!] {treeish} {pathspec}
 
 Same as |:ArgsTreeish|, but use the local arglist.
 
@@ -35,7 +35,7 @@ modify it.
 
 
                                                 *:ArgsDiff*
-:ArgsDiff {pathspec}
+:ArgsDiff[!] {pathspec}
 
 Set the arglist to the files described by {pathspec} that are modified in the
 working tree.
@@ -44,7 +44,7 @@ working tree.
 be added to the arglist.
 
                                                 *:ArglDiff*
-:ArglDiff {pathspec}
+:ArglDiff[!] {pathspec}
 
 Same as |:ArgsDiff|, but use the local arglist.
 
@@ -57,7 +57,7 @@ but add to the arglist rather than modify it.
 
 
                                                 *:ArgsUntracked*
-:ArgsUntracked {pathspec}
+:ArgsUntracked[!] {pathspec}
 
 Set the arglist to the untracked files described by {pathspec}.
 
@@ -66,7 +66,7 @@ be added to the arglist. Use with caution if your build directory lives inside
 your Git tree!
 
                                                 *:ArglUntracked*
-:ArglUntracked {pathspec}
+:ArglUntracked[!] {pathspec}
 
 Same as |:ArglUntracked|, but use the local arglist. Use with caution if your
 build directory lives inside your Git tree!
@@ -81,7 +81,7 @@ lives inside your Git tree!
 
 
                                                 *:ArgsStage*
-:ArgsStage {pathspec}
+:ArgsStage[!] {pathspec}
 
 Set the arglist to the files described by {pathspec} that are modified in the
 stage.
@@ -90,12 +90,12 @@ stage.
 added to the arglist.
 
                                                 *:ArglStage*
-:ArglStage {pathspec}
+:ArglStage[!] {pathspec}
 
 Same as |:ArglStage|, but use the local arglist.
 
                                                 *:ArgAddStage*
-:ArglStage {pathspec}
+:ArgAddStage {pathspec}
 
 Add the files described by {pathspec} that are modified in the stage to the
 arglist. In other words, do the same thing as |:ArgsStage| and |:ArglStage|,
