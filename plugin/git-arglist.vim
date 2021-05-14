@@ -65,54 +65,29 @@ function! s:SetArglistToStage(arglist_cmd, pathspec)
   exe a:arglist_cmd . " " . join(l:arglist, " ")
 endfunction
 
-function! s:ArgsTreeish(...)
-  let l:treeish = get(a:, 1, "HEAD")
-  let l:pathspec = a:000[1:]
-  let l:arglist_cmd = "args"
+function! s:Treeish(...)
+  let l:arglist_cmd = a:1
+  let l:treeish = get(a:, 2, "HEAD")
+  let l:pathspec = a:000[2:]
 
   call s:SetArglistToTreeish(l:arglist_cmd, l:treeish, l:pathspec)
 endfunction
 
-function! s:ArglTreeish(...)
-  let l:treeish = get(a:, 1, "HEAD")
+function! s:Diff(...)
+  let l:arglist_cmd = a:1
   let l:pathspec = a:000[1:]
-  let l:arglist_cmd = "argl"
-  call s:SetArglistToTreeish(l:arglist_cmd, l:treeish, l:pathspec)
-endfunction
-
-function! s:ArgsDiff(...)
-  let l:pathspec = a:000
-  let l:arglist_cmd = "args"
   call s:SetArglistToDiff(l:arglist_cmd, l:pathspec)
 endfunction
 
-function! s:ArglDiff(...)
-  let l:pathspec = a:000
-  let l:arglist_cmd = "argl"
-  call s:SetArglistToDiff(l:arglist_cmd, l:pathspec)
-endfunction
-
-function! s:ArgsUntracked(...)
-  let l:pathspec = a:000
-  let l:arglist_cmd = "args"
+function! s:Untracked(...)
+  let l:arglist_cmd = a:1
+  let l:pathspec = a:000[1:]
   call s:SetArglistToUntracked(l:arglist_cmd, l:pathspec)
 endfunction
 
-function! s:ArglUntracked(...)
-  let l:pathspec = a:000
-  let l:arglist_cmd = "argl"
-  call s:SetArglistToUntracked(l:arglist_cmd, l:pathspec)
-endfunction
-
-function! s:ArgsStage(...)
-  let l:pathspec = a:000
-  let l:arglist_cmd = "args"
-  call s:SetArglistToStage(l:arglist_cmd, l:pathspec)
-endfunction
-
-function! s:ArglStage(...)
-  let l:pathspec = a:000
-  let l:arglist_cmd = "argl"
+function! s:Stage(...)
+  let l:arglist_cmd = a:1
+  let l:pathspec = a:000[1:]
   call s:SetArglistToStage(l:arglist_cmd, l:pathspec)
 endfunction
 
@@ -169,29 +144,29 @@ function! s:CompleteArgxTreeish(A, L, P)
 endfunction
 
 if !exists(":ArgsTreeish")
-  command! -nargs=* -complete=customlist,s:CompleteArgxTreeish ArgsTreeish :call s:ErrWrapper("s:ArgsTreeish", <f-args>)
+  command! -nargs=* -complete=customlist,s:CompleteArgxTreeish ArgsTreeish :call s:ErrWrapper("s:Treeish", "args", <f-args>)
 endif
 if !exists(":ArglTreeish")
-  command! -nargs=* -complete=customlist,s:CompleteArgxTreeish ArglTreeish :call s:ErrWrapper("s:ArglTreeish", <f-args>)
+  command! -nargs=* -complete=customlist,s:CompleteArgxTreeish ArglTreeish :call s:ErrWrapper("s:Treeish", "argl", <f-args>)
 endif
 
 if !exists(":ArgsDiff")
-  command! -nargs=* -complete=file ArgsDiff :call s:ErrWrapper("s:ArgsDiff", <f-args>)
+  command! -nargs=* -complete=file ArgsDiff :call s:ErrWrapper("s:Diff", "args", <f-args>)
 endif
 if !exists(":ArglDiff")
-  command! -nargs=* -complete=file ArglDiff :call s:ErrWrapper("s:ArglDiff", <f-args>)
+  command! -nargs=* -complete=file ArglDiff :call s:ErrWrapper("s:Diff", "argl", <f-args>)
 endif
 
 if !exists(":ArgsUntracked")
-  command! -nargs=* -complete=file ArgsUntracked :call s:ErrWrapper("s:ArgsUntracked", <f-args>)
+  command! -nargs=* -complete=file ArgsUntracked :call s:ErrWrapper("s:Untracked", "args", <f-args>)
 endif
 if !exists(":ArglUntracked")
-  command! -nargs=* -complete=file ArglUntracked :call s:ErrWrapper("s:ArglUntracked", <f-args>)
+  command! -nargs=* -complete=file ArglUntracked :call s:ErrWrapper("s:Untracked", "argl", <f-args>)
 endif
 
 if !exists(":ArgsStage")
-  command! -nargs=* -complete=file ArgsStage :call s:ErrWrapper("s:ArgsStage", <f-args>)
+  command! -nargs=* -complete=file ArgsStage :call s:ErrWrapper("s:Stage", "args", <f-args>)
 endif
 if !exists(":ArglStage")
-  command! -nargs=* -complete=file ArglStage :call s:ErrWrapper("s:ArglStage", <f-args>)
+  command! -nargs=* -complete=file ArglStage :call s:ErrWrapper("s:Stage", "argl", <f-args>)
 endif
