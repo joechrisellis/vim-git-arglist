@@ -150,23 +150,11 @@ if !exists(":ArglTreeish")
   command! -nargs=* -complete=customlist,s:CompleteArgxTreeish ArglTreeish :call s:ErrWrapper("s:Treeish", "argl", <f-args>)
 endif
 
-if !exists(":ArgsDiff")
-  command! -nargs=* -complete=file ArgsDiff :call s:ErrWrapper("s:Diff", "args", <f-args>)
-endif
-if !exists(":ArglDiff")
-  command! -nargs=* -complete=file ArglDiff :call s:ErrWrapper("s:Diff", "argl", <f-args>)
-endif
-
-if !exists(":ArgsUntracked")
-  command! -nargs=* -complete=file ArgsUntracked :call s:ErrWrapper("s:Untracked", "args", <f-args>)
-endif
-if !exists(":ArglUntracked")
-  command! -nargs=* -complete=file ArglUntracked :call s:ErrWrapper("s:Untracked", "argl", <f-args>)
-endif
-
-if !exists(":ArgsStage")
-  command! -nargs=* -complete=file ArgsStage :call s:ErrWrapper("s:Stage", "args", <f-args>)
-endif
-if !exists(":ArglStage")
-  command! -nargs=* -complete=file ArglStage :call s:ErrWrapper("s:Stage", "argl", <f-args>)
-endif
+for s:args_cmd in ["Args", "Argl"]
+  for s:action in ["Diff", "Untracked", "Stage"]
+    let s:new_cmd = s:args_cmd . s:action
+    if !exists(":" . s:new_cmd)
+      exe "command! -nargs=* -complete=file " . s:new_cmd . " :call s:ErrWrapper('s:" . s:action . "', '" . tolower(s:args_cmd) . "', <f-args>)"
+    endif
+  endfor
+endfor
