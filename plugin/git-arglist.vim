@@ -29,7 +29,11 @@ function! s:SetArglistToTreeish(arglist_cmd, treeish, pathspec)
         \ . "-- "
         \ . join(a:pathspec, " "))
 
-  exe a:arglist_cmd . " " . join(l:arglist, " ")
+  if !empty(l:arglist)
+    exe a:arglist_cmd . " " . join(l:arglist, " ")
+  else
+    echohl WarningMsg | echo "No files found." | echohl None
+  endif
 endfunction
 
 let g:diff_git_flags = "--name-only --diff-filter d"
@@ -40,7 +44,11 @@ function! s:SetArglistToDiff(arglist_cmd, pathspec)
         \ . "-- "
         \ . join(a:pathspec, " "))
 
-  exe a:arglist_cmd . " " . join(l:arglist, " ")
+  if !empty(l:arglist)
+    exe a:arglist_cmd . " " . join(l:arglist, " ")
+  else
+    echohl WarningMsg | echo "No files found." | echohl None
+  endif
 endfunction
 
 let g:untracked_git_flags = "--others --exclude-standard"
@@ -51,7 +59,11 @@ function! s:SetArglistToUntracked(arglist_cmd, pathspec)
         \ . "-- "
         \ . join(a:pathspec, " "))
 
-  exe a:arglist_cmd . " " . join(l:arglist, " ")
+  if !empty(l:arglist)
+    exe a:arglist_cmd . " " . join(l:arglist, " ")
+  else
+    echohl WarningMsg | echo "No files found." | echohl None
+  endif
 endfunction
 
 let g:stage_git_flags = "--cached --name-only --diff-filter d"
@@ -62,45 +74,50 @@ function! s:SetArglistToStage(arglist_cmd, pathspec)
         \ . "-- "
         \ . join(a:pathspec, " "))
 
-  exe a:arglist_cmd . " " . join(l:arglist, " ")
+  if !empty(l:arglist)
+    exe a:arglist_cmd . " " . join(l:arglist, " ")
+  else
+    echohl WarningMsg | echo "No files found." | echohl None
+  endif
 endfunction
 
-function! s:Treeish(...)
-  let l:arglist_cmd = a:1
-  let l:treeish = get(a:, 2, "HEAD")
-  let l:pathspec = a:000[2:]
-
-  call s:SetArglistToTreeish(l:arglist_cmd, l:treeish, l:pathspec)
-endfunction
-
-function! s:Diff(...)
-  let l:arglist_cmd = a:1
+function! s:Treeish(arglist_cmd, ...)
+  let l:treeish = get(a:, 1, "HEAD")
   let l:pathspec = a:000[1:]
-  call s:SetArglistToDiff(l:arglist_cmd, l:pathspec)
+  call s:SetArglistToTreeish(a:arglist_cmd, l:treeish, l:pathspec)
 endfunction
 
-function! s:Untracked(...)
-  let l:arglist_cmd = a:1
-  let l:pathspec = a:000[1:]
-  call s:SetArglistToUntracked(l:arglist_cmd, l:pathspec)
+function! s:Diff(arglist_cmd, ...)
+  let l:pathspec = a:000
+  call s:SetArglistToDiff(a:arglist_cmd, l:pathspec)
 endfunction
 
-function! s:Stage(...)
-  let l:arglist_cmd = a:1
-  let l:pathspec = a:000[1:]
-  call s:SetArglistToStage(l:arglist_cmd, l:pathspec)
+function! s:Untracked(arglist_cmd, ...)
+  let l:pathspec = a:000
+  call s:SetArglistToUntracked(a:arglist_cmd, l:pathspec)
 endfunction
 
-function! s:ErrWrapper(...)
+function! s:Stage(arglist_cmd, ...)
+  let l:pathspec = a:000
+  call s:SetArglistToStage(a:arglist_cmd, l:pathspec)
+endfunction
+
+function! s:CommandWrapper(...)
   if !s:InGitRepo()
     echohl ErrorMsg | echo "Not in a git repo!" | echohl None
     return
   endif
 
   let l:GitFunction = a:1
-  let l:args = a:000[1:]
+  let l:arglist_cmd = a:2
+  let l:bang = a:3
+  let l:args = a:000[3:]
+  if l:bang
+    let l:arglist_cmd .= "!"
+  endif
+
   try
-    call call(l:GitFunction, l:args)
+    call call(l:GitFunction, [l:arglist_cmd] + l:args)
   catch /.*/
     echohl ErrorMsg | echo "Caught error: " . v:exception | echohl None
   endtry
@@ -143,20 +160,31 @@ function! s:CompleteArgxTreeish(A, L, P)
   endif
 endfunction
 
-function! s:GetCompletion(action)
-  if a:action ==# "Treeish"
-    return "customlist,s:CompleteArgxTreeish"
-  else
-    return "file"
-  endif
-endfunction
+let s:action_dict = {
+      \ "Treeish" : ["-nargs=*", "-complete=customlist,s:CompleteArgxTreeish"],
+      \ "Diff" : ["-nargs=*", "-complete=file"],
+      \ "Untracked" : ["-nargs=*", "-complete=file"],
+      \ "Stage" : ["-nargs=*", "-complete=file"],
+      \ }
 
-for s:args_cmd in ["Args", "Argl", "ArgAdd", "ArgDelete"]
-  for s:action in ["Treeish", "Diff", "Untracked", "Stage"]
-    let s:new_cmd = s:args_cmd . s:action
-    let s:new_cmd_completion = s:GetCompletion(s:action)
-    if !exists(":" . s:new_cmd)
-      exe "command! -nargs=* -complete=" . s:new_cmd_completion . " " . s:new_cmd . " :call s:ErrWrapper('s:" . s:action . "', '" . tolower(s:args_cmd) . "', <f-args>)"
-    endif
+let s:args_cmd_dict = {
+      \ "Args" : ["-bang"],
+      \ "Argl" : ["-bang"],
+      \ "ArgAdd" : [],
+      \ "ArgDelete" : [],
+      \ "ArgEdit" : ["-bang"],
+      \ }
+
+for s:args_cmd_dict_entry in items(s:args_cmd_dict)
+  let s:prefix = s:args_cmd_dict_entry[0]
+  let s:flags_a = s:args_cmd_dict_entry[1]
+
+  for s:action_dict_entry in items(s:action_dict)
+    let s:action = s:action_dict_entry[0]
+    let s:flags_b = s:action_dict_entry[1]
+
+    let s:cmd = s:prefix . s:action
+    let s:flags = join(s:flags_a + s:flags_b, " ")
+    exe "command! " . s:flags . " " . s:cmd . " :call s:CommandWrapper('s:" . s:action . "', '" . tolower(s:prefix) . "', <bang>0, <f-args>)"
   endfor
 endfor
