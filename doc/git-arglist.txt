@@ -1,14 +1,51 @@
-*git-arglist.txt*  Git helpers for modifying the arglist.
+*git-arglist.txt*  Git helpers for manipulating the arglist.
 
 Author:  Joe Ellis
 License: Same terms as Vim itself (see |license|)
 
+
 INTRODUCTION                                    *git-arglist*
 
-This plugin adds helper commands for modifying the arglist based on the
+This plugin adds helper commands for manipulating the arglist based on the
 current Git repository.
 
+
 COMMANDS                                        *git-arglist-commands*
+
+The plugin provides a collection of commands for manipulating the arglist
+based on the current Git repository. Where possible, these commands try to
+remain faithful to the semantics of the standard Vim builtin commands for
+arglist manipulation.
+
+There are currently four main contexts:
+
+- Treeish commands, which modify the arglist based on a treeish (for example,
+  a commit). |git-arglist-treeish-commands| for more information.
+
+- Diff commands, which modify the arglist based on files containing unstaged
+  changes in the working tree. |git-arglist-diff-commands| for more
+  information.
+
+- Untracked commands, which modify the arglist based on untracked files in the
+  working tree. |git-arglist-untracked-commands| for more information.
+
+- Stage commands, which modify the arglist based on files containing staged
+  changes. |git-arglist-stage-commands| for more information.
+
+For each of these contexts, the following variants exist:
+
+- |:Args...|, which works like the |:args| builtin command.
+
+- |:Argl...|, which works like the |:argl| builtin command.
+
+- |:ArgAdd...|, which works like the |:argadd| builtin command.
+
+- |:ArgDelete...|, which works like the |:argdelete| builtin command.
+
+- |:ArgEdit...|, which works like the |:argedit| builtin command.
+
+
+TREEISH COMMANDS                                *git-arglist-treeish-commands*
 
                                                 *:ArgsTreeish*
 :ArgsTreeish[!] {treeish} {pathspec}
@@ -28,23 +65,20 @@ Same as |:ArgsTreeish|, but use the local arglist.
                                                 *:ArgAddTreeish*
 :ArgAddTreeish {treeish} {pathspec}
 
-Add the files described by {pathspec} that are created/modified by {treeish}
-(with respect to its parent) to the arglist. In other words, do the same thing
-as |:ArgsTreeish| and |:ArglTreeish|, but add to the arglist rather than
-modify it.
+Same as |:ArgsTreeish|, but add to the arglist rather than setting it.
 
                                                 *:ArgDeleteTreeish*
 :ArgDeleteTreeish {treeish} {pathspec}
 
-Delete the files described by {pathspec} that are created/modified by
-{treeish} (with respect to its parent) from the arglist.
+Same as |:ArgsTreeish|, but delete from the arglist rather than setting it.
 
                                                 *:ArgEditTreeish*
 :ArgEditTreeish[!] {treeish} {pathspec}
 
-Add the files described by {pathspec} that are created/modified by {treeish}
-(with respect to its parent) to the arglist and edit them.
+Same as |:ArgAddTreeish|, but also edit the files.
 
+
+DIFF COMMANDS                                   *git-arglist-diff-commands*
 
                                                 *:ArgsDiff*
 :ArgsDiff[!] {pathspec}
@@ -63,22 +97,24 @@ Same as |:ArgsDiff|, but use the local arglist.
                                                 *:ArgAddDiff*
 :ArgAddDiff {pathspec}
 
-Add the files described by {pathspec} that are modified in the working tree to
-the arglist. In other words, do the same thing as |:ArgsDiff| and |:ArglDiff|,
-but add to the arglist rather than modify it.
+Same as |:ArgsDiff|, but add to the arglist rather than setting it.
 
                                                 *:ArgDeleteDiff*
 :ArgDeleteDiff {pathspec}
 
-Delete the files described by {pathspec} that are modified in the working tree
-from the arglist.
+Same as |:ArgsDiff|, but delete from the arglist rather than setting it.
 
                                                 *:ArgEditDiff*
 :ArgEditDiff[!] {pathspec}
 
-Add the files described by {pathspec} that are modified in the working tree to
-the arglist and edit them.
+Same as |:ArgAddDiff|, but also edit the files.
 
+
+UNTRACKED COMMANDS                              *git-arglist-untracked-commands*
+
+WARNING: If you don't specify a {pathspec} for the commands below, they will
+         operate on all of the untracked files in your working tree. So use
+         with with caution if your build directory lives inside your Git tree.
 
                                                 *:ArgsUntracked*
 :ArgsUntracked[!] {pathspec}
@@ -86,33 +122,30 @@ the arglist and edit them.
 Set the arglist to the untracked files described by {pathspec}.
 
 {pathspec} may be omitted. If {pathspec} is omitted all untracked files will
-be added to the arglist. Use with caution if your build directory lives inside
-your Git tree!
+be added to the arglist.
 
                                                 *:ArglUntracked*
 :ArglUntracked[!] {pathspec}
 
-Same as |:ArglUntracked|, but use the local arglist. Use with caution if your
-build directory lives inside your Git tree!
+Same as |:ArglUntracked|, but use the local arglist.
 
                                                 *:ArgAddUntracked*
 :ArgAddUntracked {pathspec}
 
-Add the untracked files described by {pathspec} to the arglist. In other
-words, do the same thing as |:ArgsUntracked| and |:ArglUntracked|, but add to
-the arglist rather than modify it. Use with caution if your build directory
-lives inside your Git tree!
+Same as |:ArgsUntracked|, but add to the arglist rather than setting it.
 
                                                 *:ArgDeleteUntracked*
 :ArgDeleteUntracked {pathspec}
 
-Delete the untracked files described by {pathspec} from the arglist.
+Same as |:ArgsUntracked|, but delete from the arglist rather than setting it.
 
                                                 *:ArgEditUntracked*
 :ArgEditUntracked[!] {pathspec}
 
-Add the untracked files described by {pathspec} to the arglist and edit them.
+Same as |:ArgAddUntracked|, but also edit the files.
 
+
+STAGE COMMANDS                                  *git-arglist-stage-commands*
 
                                                 *:ArgsStage*
 :ArgsStage[!] {pathspec}
@@ -131,21 +164,18 @@ Same as |:ArglStage|, but use the local arglist.
                                                 *:ArgAddStage*
 :ArgAddStage {pathspec}
 
-Add the files described by {pathspec} that are modified in the stage to the
-arglist. In other words, do the same thing as |:ArgsStage| and |:ArglStage|,
-but add to the arglist rather than modifying it.
+Same as |:ArgsStage|, but add to the arglist rather than setting it.
 
                                                 *:ArgDeleteStage*
 :ArgDeleteStage {pathspec}
 
-Delete the files described by {pathspec} that are modified in the stage from
-the arglist.
+Same as |:ArgsStage|, but delete from the arglist rather than setting it.
 
                                                 *:ArgEditStage*
 :ArgEditStage[!] {pathspec}
 
-Add the files described by {pathspec} that are modified in the stage to the
-arglist and edit them.
+Same as |:ArgAddStage|, but also edit the files.
+
 
 EXAMPLE WORKFLOW                                *git-arglist-example-workflow*
 
@@ -155,13 +185,14 @@ modified/added source files open in one Vim tab, and the modified/added tests
 open in another. To achieve this, after creating a local copy of a patch, I
 use:
 >
-    :ArglTreeish HEAD :!llvm/test
-    :tabnew +ArglTreeish\ HEAD\ llvm/test
+    :ArglTreeish HEAD :!{llvm,clang}/test
+    :tabnew +ArglTreeish\ HEAD\ {llvm,clang}/test
 <
 The first command sets the local arglist of the current window to all of the
-modified/added files that are not in the `llvm/test` tree. The second command
-creates a new tab, and sets the local arglist for the new window to be the
-modified/added tests inside the `llvm/test` tree.
+modified/added files that are not in the `llvm/test` or `clang/test` trees.
+The second command creates a new tab, and sets the local arglist for the new
+window to be the modified/added tests inside the `llvm/test` and `clang/test`
+trees.
 
 Having the tests in a local arglist like this is super useful because it
 allows me to run them all using Vim's built-in terminal. I have the following
@@ -177,9 +208,10 @@ terminal window and type something like:
 <
 ... which will be expanded to the full names of the test files!
 
+
 ISSUES                                          *git-arglist-issues*
 
 - The commands above may not function correctly if your current working
-  directory is symlink to a subdirectory within the Git respository.
+  directory is symlink to a subdirectory within the Git repository.
 
  vim:tw=78:ts=8:ft=help:norl:
