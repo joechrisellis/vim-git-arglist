@@ -33,6 +33,12 @@ Add the files described by {pathspec} that are created/modified by {treeish}
 as |:ArgsTreeish| and |:ArglTreeish|, but add to the arglist rather than
 modify it.
 
+                                                *:ArgDeleteTreeish*
+:ArgDeleteTreeish {treeish} {pathspec}
+
+Delete the files described by {pathspec} that are created/modified by
+{treeish} (with respect to its parent) from the arglist.
+
 
                                                 *:ArgsDiff*
 :ArgsDiff[!] {pathspec}
@@ -54,6 +60,12 @@ Same as |:ArgsDiff|, but use the local arglist.
 Add the files described by {pathspec} that are modified in the working tree to
 the arglist. In other words, do the same thing as |:ArgsDiff| and |:ArglDiff|,
 but add to the arglist rather than modify it.
+
+                                                *:ArgDeleteDiff*
+:ArgDeleteDiff {pathspec}
+
+Delete the files described by {pathspec} that are modified in the working tree
+from the arglist.
 
 
                                                 *:ArgsUntracked*
@@ -79,6 +91,11 @@ words, do the same thing as |:ArgsUntracked| and |:ArglUntracked|, but add to
 the arglist rather than modify it. Use with caution if your build directory
 lives inside your Git tree!
 
+                                                *:ArgDeleteUntracked*
+:ArgDeleteUntracked {pathspec}
+
+Delete the untracked files described by {pathspec} from the arglist.
+
 
                                                 *:ArgsStage*
 :ArgsStage[!] {pathspec}
@@ -100,6 +117,12 @@ Same as |:ArglStage|, but use the local arglist.
 Add the files described by {pathspec} that are modified in the stage to the
 arglist. In other words, do the same thing as |:ArgsStage| and |:ArglStage|,
 but add to the arglist rather than modifying it.
+
+                                                *:ArgDeleteStage*
+:ArgDeleteStage {pathspec}
+
+Delete the files described by {pathspec} that are modified in the stage from
+the arglist.
 
 EXAMPLE WORKFLOW                                *git-arglist-example-workflow*
 
