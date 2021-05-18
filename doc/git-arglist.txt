@@ -177,6 +177,27 @@ Same as |:ArgsStage|, but delete from the arglist rather than setting it.
 Same as |:ArgAddStage|, but also edit the files.
 
 
+VIMSCRIPT FUNCTIONS                             *git-arglist-vimscript-functions*
+
+The plugin exposes the following Vimscript functions:
+
+- `TreeishFiles({treeish}, {pathspec}...)` -- returns a list of the files
+  described by {pathspec} that are created/modified by {treeish} (with respect
+  to its parent).
+
+- `DiffFiles({pathspec}...)` -- returns a list of the files described by
+  {pathspec} that are modified in the working tree.
+
+- `UntrackedFiles({pathspec}...)` -- returns a list of the untracked files
+  described by {pathspec}.
+
+- `StageFiles({pathspec}...)` -- returns a list of the files described by
+  {pathspec} that are modified in the stage.
+
+These are exposed for flexibility. You can use them in backtick expansion (see
+|`=|), which opens up a world of possibilities. Be creative!
+
+
 EXAMPLE WORKFLOW                                *git-arglist-example-workflow*
 
 I currently work on LLVM. One thing that I have found this plugin particularly
