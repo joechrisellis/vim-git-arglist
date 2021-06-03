@@ -22,15 +22,15 @@ There are currently five main contexts:
 - Treeish commands, which modify the arglist based on a treeish (for example,
   a commit). |git-arglist-treeish-commands| for more information.
 
-- Diff commands, which modify the arglist based on files containing unstaged
-  changes in the working tree. |git-arglist-diff-commands| for more
+- Diffed commands, which modify the arglist based on files containing unstaged
+  changes in the working tree. |git-arglist-diffed-commands| for more
   information.
 
 - Untracked commands, which modify the arglist based on untracked files in the
   working tree. |git-arglist-untracked-commands| for more information.
 
-- Stage commands, which modify the arglist based on files containing staged
-  changes. |git-arglist-stage-commands| for more information.
+- Staged commands, which modify the arglist based on files containing staged
+  changes. |git-arglist-staged-commands| for more information.
 
 - Conflicted commands, which modify the arglist based on conflicted files in
   the working tree. |git-arglist-conflicted-commands| for more information.
@@ -81,10 +81,10 @@ Same as |:ArgsTreeish|, but delete from the arglist rather than setting it.
 Same as |:ArgAddTreeish|, but also edit the files.
 
 
-DIFF COMMANDS                                   *git-arglist-diff-commands*
+DIFFED COMMANDS                                 *git-arglist-diffed-commands*
 
-                                                *:ArgsDiff*
-:ArgsDiff[!] {pathspec}
+                                                *:ArgsDiffed*
+:ArgsDiffed[!] {pathspec}
 
 Set the arglist to the files described by {pathspec} that are modified in the
 working tree.
@@ -92,25 +92,25 @@ working tree.
 {pathspec} may be omitted. If {pathspec} is omitted, all modified files will
 be added to the arglist.
 
-                                                *:ArglDiff*
-:ArglDiff[!] {pathspec}
+                                                *:ArglDiffed*
+:ArglDiffed[!] {pathspec}
 
-Same as |:ArgsDiff|, but use the local arglist.
+Same as |:ArgsDiffed|, but use the local arglist.
 
-                                                *:ArgAddDiff*
-:ArgAddDiff {pathspec}
+                                                *:ArgAddDiffed*
+:ArgAddDiffed {pathspec}
 
-Same as |:ArgsDiff|, but add to the arglist rather than setting it.
+Same as |:ArgsDiffed|, but add to the arglist rather than setting it.
 
-                                                *:ArgDeleteDiff*
-:ArgDeleteDiff {pathspec}
+                                                *:ArgDeleteDiffed*
+:ArgDeleteDiffed {pathspec}
 
-Same as |:ArgsDiff|, but delete from the arglist rather than setting it.
+Same as |:ArgsDiffed|, but delete from the arglist rather than setting it.
 
-                                                *:ArgEditDiff*
-:ArgEditDiff[!] {pathspec}
+                                                *:ArgEditDiffed*
+:ArgEditDiffed[!] {pathspec}
 
-Same as |:ArgAddDiff|, but also edit the files.
+Same as |:ArgAddDiffed|, but also edit the files.
 
 
 UNTRACKED COMMANDS                              *git-arglist-untracked-commands*
@@ -148,36 +148,36 @@ Same as |:ArgsUntracked|, but delete from the arglist rather than setting it.
 Same as |:ArgAddUntracked|, but also edit the files.
 
 
-STAGE COMMANDS                                  *git-arglist-stage-commands*
+STAGED COMMANDS                                 *git-arglist-staged-commands*
 
-                                                *:ArgsStage*
-:ArgsStage[!] {pathspec}
+                                                *:ArgsStaged*
+:ArgsStaged[!] {pathspec}
 
 Set the arglist to the files described by {pathspec} that are modified in the
-stage.
+staged.
 
 {pathspec} may be omitted. If {pathspec} is omitted all staged files will be
 added to the arglist.
 
-                                                *:ArglStage*
-:ArglStage[!] {pathspec}
+                                                *:ArglStaged*
+:ArglStaged[!] {pathspec}
 
-Same as |:ArglStage|, but use the local arglist.
+Same as |:ArglStaged|, but use the local arglist.
 
-                                                *:ArgAddStage*
-:ArgAddStage {pathspec}
+                                                *:ArgAddStaged*
+:ArgAddStaged {pathspec}
 
-Same as |:ArgsStage|, but add to the arglist rather than setting it.
+Same as |:ArgsStaged|, but add to the arglist rather than setting it.
 
-                                                *:ArgDeleteStage*
-:ArgDeleteStage {pathspec}
+                                                *:ArgDeleteStaged*
+:ArgDeleteStaged {pathspec}
 
-Same as |:ArgsStage|, but delete from the arglist rather than setting it.
+Same as |:ArgsStaged|, but delete from the arglist rather than setting it.
 
-                                                *:ArgEditStage*
-:ArgEditStage[!] {pathspec}
+                                                *:ArgEditStaged*
+:ArgEditStaged[!] {pathspec}
 
-Same as |:ArgAddStage|, but also edit the files.
+Same as |:ArgAddStaged|, but also edit the files.
 
 
 CONFLICTED COMMANDS                             *git-arglist-conflicted-commands*
@@ -220,13 +220,13 @@ The plugin exposes the following Vimscript functions:
   described by {pathspec} that are created/modified by {treeish} (with respect
   to its parent).
 
-- `DiffFiles({pathspec}...)` -- returns a list of the files described by
+- `DiffedFiles({pathspec}...)` -- returns a list of the files described by
   {pathspec} that are modified in the working tree.
 
 - `UntrackedFiles({pathspec}...)` -- returns a list of the untracked files
   described by {pathspec}.
 
-- `StageFiles({pathspec}...)` -- returns a list of the files described by
+- `StagedFiles({pathspec}...)` -- returns a list of the files described by
   {pathspec} that are modified in the stage.
 
 - `ConflictedFiles({pathspec}...)` -- returns a list of the files described by

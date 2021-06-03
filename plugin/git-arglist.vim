@@ -32,11 +32,11 @@ function! g:TreeishFiles(...)
         \ . join(l:pathspec, " "))
 endfunction
 
-let g:diff_git_flags = "--name-only --diff-filter d"
-function! g:DiffFiles(...)
+let g:diffed_git_flags = "--name-only --diff-filter d"
+function! g:DiffedFiles(...)
   return s:Git(
         \ "diff "
-        \ . g:diff_git_flags . " "
+        \ . g:diffed_git_flags . " "
         \ . "-- "
         \ . join(a:000, " "))
 endfunction
@@ -50,11 +50,11 @@ function! g:UntrackedFiles(...)
         \ . join(a:000, " "))
 endfunction
 
-let g:stage_git_flags = "--cached --name-only --diff-filter d"
-function! g:StageFiles(...)
+let g:staged_git_flags = "--cached --name-only --diff-filter d"
+function! g:StagedFiles(...)
   return s:Git(
         \ "diff "
-        \ . g:stage_git_flags . " "
+        \ . g:staged_git_flags . " "
         \ . "-- "
         \ . join(a:000, " "))
 endfunction
@@ -135,9 +135,9 @@ endfunction
 
 let s:context_dict = {
       \ "Treeish" : ["-nargs=*", "-complete=customlist,s:CompleteArgxTreeish"],
-      \ "Diff" : ["-nargs=*", "-complete=file"],
+      \ "Diffed" : ["-nargs=*", "-complete=file"],
       \ "Untracked" : ["-nargs=*", "-complete=file"],
-      \ "Stage" : ["-nargs=*", "-complete=file"],
+      \ "Staged" : ["-nargs=*", "-complete=file"],
       \ "Conflicted" : ["-nargs=*", "-complete=file"],
       \ }
 
