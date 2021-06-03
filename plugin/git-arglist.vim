@@ -59,6 +59,15 @@ function! g:StageFiles(...)
         \ . join(a:000, " "))
 endfunction
 
+let g:conflicted_git_flags = "--name-only --diff-filter U"
+function! g:ConflictedFiles(...)
+  return s:Git(
+        \ "diff "
+        \ . g:conflicted_git_flags . " "
+        \ . "-- "
+        \ . join(a:000, " "))
+endfunction
+
 function! s:CommandWrapper(...)
   if !s:InGitRepo()
     echohl ErrorMsg | echo "Not in a git repo!" | echohl None
@@ -129,6 +138,7 @@ let s:context_dict = {
       \ "Diff" : ["-nargs=*", "-complete=file"],
       \ "Untracked" : ["-nargs=*", "-complete=file"],
       \ "Stage" : ["-nargs=*", "-complete=file"],
+      \ "Conflicted" : ["-nargs=*", "-complete=file"],
       \ }
 
 let s:args_cmd_dict = {
