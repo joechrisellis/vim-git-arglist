@@ -20,13 +20,13 @@ function! s:InGitRepo()
   return v:shell_error == 0
 endfunction
 
-let g:diff_tree_git_flags = "-m --no-commit-id --name-only --diff-filter d -r"
+let g:treeish_git_flags = "-m --no-commit-id --name-only --diff-filter d -r"
 function! g:TreeishFiles(...)
   let l:treeish = get(a:, 1, "HEAD")
   let l:pathspec = a:000[1:]
   return s:Git(
         \ "diff-tree "
-        \ . g:diff_tree_git_flags . " "
+        \ . g:treeish_git_flags . " "
         \ . "'" . l:treeish . "' "
         \ . "-- "
         \ . join(l:pathspec, " "))
