@@ -17,7 +17,7 @@ based on the current Git repository. Where possible, these commands try to
 remain faithful to the semantics of the standard Vim builtin commands for
 arglist manipulation.
 
-There are currently four main contexts:
+There are currently five main contexts:
 
 - Treeish commands, which modify the arglist based on a treeish (for example,
   a commit). |git-arglist-treeish-commands| for more information.
@@ -31,6 +31,9 @@ There are currently four main contexts:
 
 - Stage commands, which modify the arglist based on files containing staged
   changes. |git-arglist-stage-commands| for more information.
+
+- Conflicted commands, which modify the arglist based on conflicted files in
+  the working tree. |git-arglist-conflicted-commands| for more information.
 
 For each of these contexts, the following variants exist:
 
@@ -177,6 +180,38 @@ Same as |:ArgsStage|, but delete from the arglist rather than setting it.
 Same as |:ArgAddStage|, but also edit the files.
 
 
+CONFLICTED COMMANDS                             *git-arglist-conflicted-commands*
+
+                                                *:ArgsConflicted*
+:ArgsConflicted[!] {pathspec}
+
+Set the arglist to the files described by {pathspec} that are conflicted in
+the working tree.
+
+{pathspec} may be omitted. If {pathspec} is omitted all conflicted files will
+be added to the arglist.
+
+                                                *:ArglConflicted*
+:ArglConflicted[!] {pathspec}
+
+Same as |:ArgsConflicted|, but use the local arglist.
+
+                                                *:ArgAddConflicted*
+:ArgAddConflicted {pathspec}
+
+Same as |:ArgsConflicted|, but add to the arglist rather than setting it.
+
+                                                *:ArgDeleteConflicted*
+:ArgDeleteConflicted {pathspec}
+
+Same as |:ArgsConflicted|, but delete from the arglist rather than setting it.
+
+                                                *:ArgEditConflicted*
+:ArgEditConflicted[!] {pathspec}
+
+Same as |:ArgAddConflicted|, but also edit the files.
+
+
 VIMSCRIPT FUNCTIONS                             *git-arglist-vimscript-functions*
 
 The plugin exposes the following Vimscript functions:
@@ -193,6 +228,9 @@ The plugin exposes the following Vimscript functions:
 
 - `StageFiles({pathspec}...)` -- returns a list of the files described by
   {pathspec} that are modified in the stage.
+
+- `ConflictedFiles({pathspec}...)` -- returns a list of the files described by
+  {pathspec} that are conflicted in the working tree.
 
 These are exposed for flexibility. You can use them in backtick expansion (see
 |`=|), which opens up a world of possibilities. Be creative!
