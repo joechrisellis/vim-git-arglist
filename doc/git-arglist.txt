@@ -130,7 +130,7 @@ be added to the arglist.
                                                 *:ArglUntracked*
 :ArglUntracked[!] {pathspec}
 
-Same as |:ArglUntracked|, but use the local arglist.
+Same as |:ArgsUntracked|, but use the local arglist.
 
                                                 *:ArgAddUntracked*
 :ArgAddUntracked {pathspec}
@@ -162,7 +162,7 @@ added to the arglist.
                                                 *:ArglStaged*
 :ArglStaged[!] {pathspec}
 
-Same as |:ArglStaged|, but use the local arglist.
+Same as |:ArgsStaged|, but use the local arglist.
 
                                                 *:ArgAddStaged*
 :ArgAddStaged {pathspec}
