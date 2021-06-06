@@ -34,11 +34,14 @@ endfunction
 
 let g:diffed_git_flags = "--name-only --diff-filter d"
 function! g:DiffedFiles(...)
+  let l:gitrevision = get(a:, 1, "")
+  let l:pathspec = a:000[1:]
   return s:Git(
         \ "diff "
         \ . g:diffed_git_flags . " "
+        \ . l:gitrevision . " "
         \ . "-- "
-        \ . join(a:000, " "))
+        \ . join(l:pathspec, " "))
 endfunction
 
 let g:untracked_git_flags = "--others --exclude-standard"
@@ -135,7 +138,7 @@ endfunction
 
 let s:context_dict = {
       \ "Treeish" : ["-nargs=*", "-complete=customlist,s:CompleteRefThenPath"],
-      \ "Diffed" : ["-nargs=*", "-complete=file"],
+      \ "Diffed" : ["-nargs=*", "-complete=customlist,s:CompleteRefThenPath"],
       \ "Untracked" : ["-nargs=*", "-complete=file"],
       \ "Staged" : ["-nargs=*", "-complete=file"],
       \ "Conflicted" : ["-nargs=*", "-complete=file"],
