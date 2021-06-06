@@ -122,7 +122,7 @@ function! s:CompleteGitBranch(A, L, P)
   return l:branches
 endfunction
 
-function! s:CompleteArgxTreeish(A, L, P)
+function! s:CompleteRefThenPath(A, L, P)
   let l:num_spaces = count(substitute(a:L, " \\{2,\\}", " ", "g"), " ")
   if l:num_spaces <= 1
     " Branch completion for the first argument.
@@ -134,7 +134,7 @@ function! s:CompleteArgxTreeish(A, L, P)
 endfunction
 
 let s:context_dict = {
-      \ "Treeish" : ["-nargs=*", "-complete=customlist,s:CompleteArgxTreeish"],
+      \ "Treeish" : ["-nargs=*", "-complete=customlist,s:CompleteRefThenPath"],
       \ "Diffed" : ["-nargs=*", "-complete=file"],
       \ "Untracked" : ["-nargs=*", "-complete=file"],
       \ "Staged" : ["-nargs=*", "-complete=file"],
