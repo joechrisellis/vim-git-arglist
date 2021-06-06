@@ -27,6 +27,22 @@ Plug 'joechrisellis/vim-git-arglist'
 
 to your vimrc.
 
+# Examples
+
+You can take full advantage of Git pathspecs with vim-git-arglist. Here are a
+few examples where doing so might be useful:
+
+- `:ArgsDiffed :/'**'.{cpp,h}` -- open all C++ source/header files that have
+  changed in the working tree. Strictly, this means "set the arglist to all
+  files modified in the working tree with extension `.cpp` and `.h`".
+- `:ArgsTreeish <commit> ':**/test/**'` -- open all tests touched by
+  `<commit>`. Strictly, this means "set the arglist to all files in the
+  repository touched by `<commit>` that are beneath a `test` subdirectory".
+- `:ArgsTreeish <commit> ':!/**/docs/**'` -- open everything touched by
+  `<commit>` except for documentation changes. Strictly, this means "set the
+  arglist to all files in the repository touched by `<commit>` that are not
+  beneath a `docs` subdirectory".
+
 # License
 
 Copyright (c) Joe Ellis. Distributed under the same terms as Vim itself. See
