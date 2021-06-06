@@ -23,8 +23,8 @@ There are currently five main contexts:
   a commit). |git-arglist-treeish-commands| for more information.
 
 - Diffed commands, which modify the arglist based on files containing unstaged
-  changes in the working tree. |git-arglist-diffed-commands| for more
-  information.
+  changes in the working tree (or based on a Git revision specifier).
+  |git-arglist-diffed-commands| for more information.
 
 - Untracked commands, which modify the arglist based on untracked files in the
   working tree. |git-arglist-untracked-commands| for more information.
@@ -84,31 +84,32 @@ Same as |:ArgAddTreeish|, but also edit the files.
 DIFFED COMMANDS                                 *git-arglist-diffed-commands*
 
                                                 *:ArgsDiffed*
-:ArgsDiffed[!] {pathspec}
+:ArgsDiffed[!] {gitrevision} {pathspec}
 
-Set the arglist to the files described by {pathspec} that are modified in the
-working tree.
+Set the arglist to the files described by {pathspec} that are listed as
+touched by the revision/range specifier {gitrevision}.
 
-{pathspec} may be omitted. If {pathspec} is omitted, all modified files will
-be added to the arglist.
+Both {gitrevision} and {pathspec} may be omitted. If {gitrevision} is omitted,
+`HEAD` will be used. If {pathspec} is omitted, all modified files will be
+added to the arglist.
 
                                                 *:ArglDiffed*
-:ArglDiffed[!] {pathspec}
+:ArglDiffed[!] {gitrevision} {pathspec}
 
 Same as |:ArgsDiffed|, but use the local arglist.
 
                                                 *:ArgAddDiffed*
-:ArgAddDiffed {pathspec}
+:ArgAddDiffed {gitrevision} {pathspec}
 
 Same as |:ArgsDiffed|, but add to the arglist rather than setting it.
 
                                                 *:ArgDeleteDiffed*
-:ArgDeleteDiffed {pathspec}
+:ArgDeleteDiffed {gitrevision} {pathspec}
 
 Same as |:ArgsDiffed|, but delete from the arglist rather than setting it.
 
                                                 *:ArgEditDiffed*
-:ArgEditDiffed[!] {pathspec}
+:ArgEditDiffed[!] {gitrevision} {pathspec}
 
 Same as |:ArgAddDiffed|, but also edit the files.
 
@@ -220,8 +221,9 @@ The plugin exposes the following Vimscript functions:
   described by {pathspec} that are created/modified by {treeish} (with respect
   to its parent).
 
-- `DiffedFiles({pathspec}...)` -- returns a list of the files described by
-  {pathspec} that are modified in the working tree.
+- `DiffedFiles({gitrevision}, {pathspec}...)` -- returns a list of the files
+  described by {pathspec} that are listed as touched by the revision/range
+  specifier {gitrevision}.
 
 - `UntrackedFiles({pathspec}...)` -- returns a list of the untracked files
   described by {pathspec}.
