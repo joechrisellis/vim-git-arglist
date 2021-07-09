@@ -238,11 +238,12 @@ These are exposed for flexibility. You can use them in backtick expansion (see
 
 EXAMPLE WORKFLOW                                *git-arglist-example-workflow*
 
-I currently work on LLVM. One thing that I have found this plugin particularly
-useful for is code review. When I'm doing a code review, I like to have the
-modified/added source files open in one Vim tab, and the modified/added tests
-open in another. To achieve this, after creating a local copy of a patch, I
-use:
+I will use the LLVM codebase as an example.
+
+One thing that I have found this plugin particularly useful for is code
+review. When I'm doing a code review, I like to have the modified/added source
+files open in one Vim tab, and the modified/added tests open in another. To
+achieve this, after creating a local copy of a patch, I use:
 >
     :ArglTreeish HEAD :!{llvm,clang}/test
     :tabnew +ArglTreeish\ HEAD\ {llvm,clang}/test
