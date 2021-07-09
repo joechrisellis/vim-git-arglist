@@ -269,6 +269,18 @@ terminal window and type something like:
 ... which will be expanded to the full names of the test files!
 
 
+FAQ                                             *git-arglist-faq*
+
+Q) Can I load diff hunks into the quickfix list with this plugin?
+A) No. If you want to do that, a good option is the |fugitive| plugin by Tim
+   Pope.
+
+    https://github.com/tpope/vim-fugitive
+
+   You can jump to diff hunks via the quickfix list with that plugin by using
+   the `:Git difftool` command.
+
+
 ISSUES                                          *git-arglist-issues*
 
 - The commands above may not function correctly if your current working
