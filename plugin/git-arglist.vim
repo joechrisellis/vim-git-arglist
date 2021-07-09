@@ -34,11 +34,14 @@ endfunction
 
 let g:diffed_git_flags = "--name-only --diff-filter d"
 function! g:DiffedFiles(...)
+  let l:gitrevision = get(a:, 1, "")
+  let l:pathspec = a:000[1:]
   return s:Git(
         \ "diff "
         \ . g:diffed_git_flags . " "
+        \ . l:gitrevision . " "
         \ . "-- "
-        \ . join(a:000, " "))
+        \ . join(l:pathspec, " "))
 endfunction
 
 let g:untracked_git_flags = "--others --exclude-standard"
@@ -122,7 +125,7 @@ function! s:CompleteGitBranch(A, L, P)
   return l:branches
 endfunction
 
-function! s:CompleteArgxTreeish(A, L, P)
+function! s:CompleteRefThenPath(A, L, P)
   let l:num_spaces = count(substitute(a:L, " \\{2,\\}", " ", "g"), " ")
   if l:num_spaces <= 1
     " Branch completion for the first argument.
@@ -134,8 +137,8 @@ function! s:CompleteArgxTreeish(A, L, P)
 endfunction
 
 let s:context_dict = {
-      \ "Treeish" : ["-nargs=*", "-complete=customlist,s:CompleteArgxTreeish"],
-      \ "Diffed" : ["-nargs=*", "-complete=file"],
+      \ "Treeish" : ["-nargs=*", "-complete=customlist,s:CompleteRefThenPath"],
+      \ "Diffed" : ["-nargs=*", "-complete=customlist,s:CompleteRefThenPath"],
       \ "Untracked" : ["-nargs=*", "-complete=file"],
       \ "Staged" : ["-nargs=*", "-complete=file"],
       \ "Conflicted" : ["-nargs=*", "-complete=file"],
