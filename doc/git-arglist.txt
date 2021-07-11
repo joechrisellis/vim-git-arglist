@@ -23,7 +23,7 @@ There are currently five main contexts:
   a commit). |git-arglist-treeish-commands| for more information.
 
 - Diffed commands, which modify the arglist based on files containing unstaged
-  changes in the working tree (or based on a Git revision specifier).
+  changes in the working tree (or based on a Git revision/range specifier).
   |git-arglist-diffed-commands| for more information.
 
 - Untracked commands, which modify the arglist based on untracked files in the
@@ -54,7 +54,7 @@ TREEISH COMMANDS                                *git-arglist-treeish-commands*
 :ArgsTreeish[!] {treeish} {pathspec}
 
 Set the arglist to the files described by {pathspec} that are created/modified
-by {treeish} (with respect to its parent).
+by {treeish} (with respect to its parent(s)).
 
 Both {treeish} and {pathspec} may be omitted. If {treeish} is omitted, `HEAD`
 will be used. If {pathspec} is omitted, all created/modified files will be
@@ -90,8 +90,9 @@ Set the arglist to the files described by {pathspec} that are listed as
 touched by the revision/range specifier {gitrevision}.
 
 Both {gitrevision} and {pathspec} may be omitted. If {gitrevision} is omitted,
-`HEAD` will be used. If {pathspec} is omitted, all modified files will be
-added to the arglist.
+`HEAD` will be used (corresponding to the files containing unstaged changes in
+the working tree). If {pathspec} is omitted, all files described by
+{gitrevision} will will be added to the arglist.
 
                                                 *:ArglDiffed*
 :ArglDiffed[!] {gitrevision} {pathspec}
@@ -117,8 +118,8 @@ Same as |:ArgAddDiffed|, but also edit the files.
 UNTRACKED COMMANDS                              *git-arglist-untracked-commands*
 
 WARNING: If you don't specify a {pathspec} for the commands below, they will
-         operate on all of the untracked files in your working tree. So use
-         with with caution if your build directory lives inside your Git tree.
+         capture all of the untracked files in your working tree. Use with
+         with caution if your build directory lives inside your working tree!
 
                                                 *:ArgsUntracked*
 :ArgsUntracked[!] {pathspec}
@@ -154,11 +155,11 @@ STAGED COMMANDS                                 *git-arglist-staged-commands*
                                                 *:ArgsStaged*
 :ArgsStaged[!] {pathspec}
 
-Set the arglist to the files described by {pathspec} that are modified in the
-staged.
+Set the arglist to the files described by {pathspec} that contain changes in
+the stage.
 
-{pathspec} may be omitted. If {pathspec} is omitted all staged files will be
-added to the arglist.
+{pathspec} may be omitted. If {pathspec} is omitted, all files containing
+staged changes will be added to the arglist.
 
                                                 *:ArglStaged*
 :ArglStaged[!] {pathspec}
@@ -189,8 +190,8 @@ CONFLICTED COMMANDS                             *git-arglist-conflicted-commands
 Set the arglist to the files described by {pathspec} that are conflicted in
 the working tree.
 
-{pathspec} may be omitted. If {pathspec} is omitted all conflicted files will
-be added to the arglist.
+{pathspec} may be omitted. If {pathspec} is omitted all files containing
+conflicts will be added to the arglist.
 
                                                 *:ArglConflicted*
 :ArglConflicted[!] {pathspec}
@@ -219,7 +220,7 @@ The plugin exposes the following Vimscript functions:
 
 - `TreeishFiles({treeish}, {pathspec}...)` -- returns a list of the files
   described by {pathspec} that are created/modified by {treeish} (with respect
-  to its parent).
+  to its parent(s)).
 
 - `DiffedFiles({gitrevision}, {pathspec}...)` -- returns a list of the files
   described by {pathspec} that are listed as touched by the revision/range
@@ -229,7 +230,7 @@ The plugin exposes the following Vimscript functions:
   described by {pathspec}.
 
 - `StagedFiles({pathspec}...)` -- returns a list of the files described by
-  {pathspec} that are modified in the stage.
+  {pathspec} that contain changes in the stage.
 
 - `ConflictedFiles({pathspec}...)` -- returns a list of the files described by
   {pathspec} that are conflicted in the working tree.
