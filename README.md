@@ -10,7 +10,7 @@ manipulating the arglist based on the repository you're working with.
 As a quick example, you can add all of the files modified/added by a particular
 commit to the arglist with `:ArgsTreeish <commit_hash>`. Or, you can add all of
 the files modified/created in your working tree to the arglist using
-`:ArgsDiff`. For more, check out `:h git-arglist-example-workflow`, which
+`:ArgsDiffed`. For more, check out `:h git-arglist-example-workflow`, which
 explains one of my personal workflows with this plugin.
 
 You can also use `:h git-arglist` for help.
@@ -32,9 +32,9 @@ to your vimrc.
 You can take full advantage of Git pathspecs with vim-git-arglist. Here are a
 few examples where doing so might be useful:
 
-- `:ArgsDiffed :/'**'.{cpp,h}` -- open all C++ source/header files that have
-  changed in the working tree. Strictly, this means "set the arglist to all
-  files modified in the working tree with extension `.cpp` and `.h`".
+- `:ArgsDiffed HEAD :/'**'.{cpp,h}` -- open all C++ source/header files that
+  have changed in the working tree. Strictly, this means "set the arglist to
+  all files modified in the working tree with extension `.cpp` and `.h`".
 - `:ArgsTreeish <commit> ':**/test/**'` -- open all tests touched by
   `<commit>`. Strictly, this means "set the arglist to all files in the
   repository touched by `<commit>` that are beneath a `test` subdirectory".
