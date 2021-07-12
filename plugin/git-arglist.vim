@@ -44,7 +44,7 @@ function! g:DiffedFiles(...)
         \ . join(l:pathspec, " "))
 endfunction
 
-let g:untracked_git_flags = "--others --exclude-standard"
+let g:untracked_git_flags = "--full-name --others --exclude-standard"
 function! g:UntrackedFiles(...)
   return s:Git(
         \ "ls-files "
