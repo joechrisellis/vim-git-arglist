@@ -1,5 +1,5 @@
 " Git helpers for modifying the arglist.
-" Last Change: 2021 May 18
+" Last Change: 2021 July 12
 " Maintainer: Joe Ellis <joechrisellis@gmail.com>
 
 if exists("g:loaded_git_arglist")
