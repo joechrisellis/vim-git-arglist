@@ -15,6 +15,15 @@ function! s:Git(git_args)
   return l:result_lines
 endfunction
 
+function! s:GetWorktreeToplevel()
+  let l:toplevel = s:Git("rev-parse --show-toplevel")[0]
+  return l:toplevel
+endfunction
+
+function! s:GetAbsolutePath(relative_path)
+  return s:GetWorktreeToplevel() . "/" . a:relative_path
+endfunction
+
 function! s:InGitRepo()
   call system("git rev-parse HEAD >/dev/null 2>&1")
   return v:shell_error == 0
