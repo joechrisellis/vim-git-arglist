@@ -20,10 +20,6 @@ function! s:GetWorktreeToplevel()
   return l:toplevel
 endfunction
 
-function! s:GetAbsolutePath(relative_path)
-  return s:GetWorktreeToplevel() . "/" . a:relative_path
-endfunction
-
 function! s:InGitRepo()
   call system("git rev-parse HEAD >/dev/null 2>&1")
   return v:shell_error == 0
@@ -33,13 +29,14 @@ let g:treeish_git_flags = "-m --no-commit-id --name-only --diff-filter d -r"
 function! g:TreeishFiles(...)
   let l:treeish = get(a:, 1, "HEAD")
   let l:pathspec = a:000[1:]
+  let l:toplevel = s:GetWorktreeToplevel()
   let l:paths = s:Git(
         \ "diff-tree "
         \ . g:treeish_git_flags . " "
         \ . "'" . l:treeish . "' "
         \ . "-- "
         \ . join(l:pathspec, " "))
-  call map(l:paths, "s:GetAbsolutePath(v:val)")
+  call map(l:paths, "l:toplevel . '/' . v:val")
   return l:paths
 endfunction
 
@@ -47,13 +44,14 @@ let g:diffed_git_flags = "--name-only --diff-filter d"
 function! g:DiffedFiles(...)
   let l:gitrevision = get(a:, 1, "")
   let l:pathspec = a:000[1:]
+  let l:toplevel = s:GetWorktreeToplevel()
   let l:paths = s:Git(
         \ "diff "
         \ . g:diffed_git_flags . " "
         \ . l:gitrevision . " "
         \ . "-- "
         \ . join(l:pathspec, " "))
-  call map(l:paths, "s:GetAbsolutePath(v:val)")
+  call map(l:paths, "l:toplevel . '/' . v:val")
   return l:paths
 endfunction
 
@@ -64,34 +62,37 @@ function! g:UntrackedFiles(...)
     let l:pathspec = ["':/'"]
   endif
 
+  let l:toplevel = s:GetWorktreeToplevel()
   let l:paths = s:Git(
         \ "ls-files "
         \ . g:untracked_git_flags . " "
         \ . "-- "
         \ . join(l:pathspec, " "))
-  call map(l:paths, "s:GetAbsolutePath(v:val)")
+  call map(l:paths, "l:toplevel . '/' . v:val")
   return l:paths
 endfunction
 
 let g:staged_git_flags = "--cached --name-only --diff-filter d"
 function! g:StagedFiles(...)
+  let l:toplevel = s:GetWorktreeToplevel()
   let l:paths = s:Git(
         \ "diff "
         \ . g:staged_git_flags . " "
         \ . "-- "
         \ . join(a:000, " "))
-  call map(l:paths, "s:GetAbsolutePath(v:val)")
+  call map(l:paths, "l:toplevel . '/' . v:val")
   return l:paths
 endfunction
 
 let g:conflicted_git_flags = "--name-only --diff-filter U"
 function! g:ConflictedFiles(...)
+  let l:toplevel = s:GetWorktreeToplevel()
   let l:paths = s:Git(
         \ "diff "
         \ . g:conflicted_git_flags . " "
         \ . "-- "
         \ . join(a:000, " "))
-  call map(l:paths, "s:GetAbsolutePath(v:val)")
+  call map(l:paths, "l:toplevel . '/' . v:val")
   return l:paths
 endfunction
 
