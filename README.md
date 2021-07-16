@@ -47,7 +47,7 @@ You can also take advantage of Git revision specifiers:
 - `:ArgsDiffed @{u}` -- open all of the files that have been modified on the
   current branch since the last push to upstream. If you want to exclude
   uncommitted changes in your working directory, you can use
-  `:ArgsDiffed ..@{u}`.
+  `:ArgsDiffed @{u}..`.
 
 # License
 
