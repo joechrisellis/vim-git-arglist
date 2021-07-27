@@ -1,5 +1,5 @@
 " Git helpers for modifying the arglist.
-" Last Change: 2021 July 12
+" Last Change: 2021 July 27
 " Maintainer: Joe Ellis <joechrisellis@gmail.com>
 
 if exists("g:loaded_git_arglist")
@@ -49,6 +49,23 @@ function! g:DiffedFiles(...)
         \ "diff "
         \ . g:diffed_git_flags . " "
         \ . l:gitrevision . " "
+        \ . "-- "
+        \ . join(l:pathspec, " "))
+  call map(l:paths, "l:toplevel . '/' . v:val")
+  return l:paths
+endfunction
+
+let g:tracked_git_flags = "--full-name"
+function! g:TrackedFiles(...)
+  let l:pathspec = a:000[0:]
+  if empty(l:pathspec)
+    let l:pathspec = ["':/'"]
+  endif
+
+  let l:toplevel = s:GetWorktreeToplevel()
+  let l:paths = s:Git(
+        \ "ls-files "
+        \ . g:tracked_git_flags . " "
         \ . "-- "
         \ . join(l:pathspec, " "))
   call map(l:paths, "l:toplevel . '/' . v:val")
@@ -164,6 +181,7 @@ endfunction
 let s:context_dict = {
       \ "Treeish" : ["-nargs=*", "-complete=customlist,s:CompleteRefThenPath"],
       \ "Diffed" : ["-nargs=*", "-complete=customlist,s:CompleteRefThenPath"],
+      \ "Tracked" : ["-nargs=*", "-complete=customlist,s:CompleteRefThenPath"],
       \ "Untracked" : ["-nargs=*", "-complete=file"],
       \ "Staged" : ["-nargs=*", "-complete=file"],
       \ "Conflicted" : ["-nargs=*", "-complete=file"],

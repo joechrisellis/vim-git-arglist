@@ -17,7 +17,7 @@ based on the current Git repository. Where possible, these commands try to
 remain faithful to the semantics of the standard Vim builtin commands for
 arglist manipulation.
 
-There are currently five main contexts:
+There are currently six main contexts:
 
 - Treeish commands, which modify the arglist based on a treeish (for example,
   a commit). |git-arglist-treeish-commands| for more information.
@@ -25,6 +25,9 @@ There are currently five main contexts:
 - Diffed commands, which modify the arglist based on files containing unstaged
   changes in the working tree (or based on a Git revision/range specifier).
   |git-arglist-diffed-commands| for more information.
+
+- Tracked commands, which modify the arglist based on files tracked by Git.
+  |git-arglist-tracked-commands| for more information.
 
 - Untracked commands, which modify the arglist based on untracked files in the
   working tree. |git-arglist-untracked-commands| for more information.
@@ -113,6 +116,37 @@ Same as |:ArgsDiffed|, but delete from the arglist rather than setting it.
 :ArgEditDiffed[!] {gitrevision} {pathspec}
 
 Same as |:ArgAddDiffed|, but also edit the files.
+
+
+TRACKED COMMANDS                                *git-arglist-tracked-commands*
+
+                                                *:ArgsTracked*
+:ArgsTracked[!] {pathspec}
+
+Set the arglist to the tracked files described by {pathspec}.
+
+{pathspec} may be omitted. If {pathspec} is omitted all tracked files will be
+added to the arglist.
+
+                                                *:ArglTracked*
+:ArglTracked[!] {pathspec}
+
+Same as |:ArgsTracked|, but use the local arglist.
+
+                                                *:ArgAddTracked*
+:ArgAddTracked {pathspec}
+
+Same as |:ArgsTracked|, but add to the arglist rather than setting it.
+
+                                                *:ArgDeleteTracked*
+:ArgDeleteTracked {pathspec}
+
+Same as |:ArgsTracked|, but delete from the arglist rather than setting it.
+
+                                                *:ArgEditTracked*
+:ArgEditTracked[!] {pathspec}
+
+Same as |:ArgAddTracked|, but also edit the files.
 
 
 UNTRACKED COMMANDS                              *git-arglist-untracked-commands*
