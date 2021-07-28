@@ -279,6 +279,9 @@ The plugin exposes the following Vimscript functions:
   described by {pathspec} that are listed as touched by the revision/range
   specifier {gitrevision}.
 
+- `TrackedFiles({pathspec}...)` -- returns a list of the tracked files
+  described by {pathspec}.
+
 - `UntrackedFiles({pathspec}...)` -- returns a list of the untracked files
   described by {pathspec}.
 
