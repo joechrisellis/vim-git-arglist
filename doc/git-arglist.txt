@@ -51,14 +51,14 @@ For each of these contexts, the following variants exist:
 - |:ArgEdit...|, which works like the |:argedit| builtin command.
 
                                                 *git-arglist-bang*
-You can give a bang [!] to some of the command variants which will cause the
+You can give a bang [!] to some of the command variants. This causes the
 plugin to use the corresponding builtin command with a bang.
 
                                                 *git-arglist-pathspec-behaviour*
 Commands accept an optional pathspec parameter. Specifying this parameter
-allows you to whittle down the targeted files. If this parameter is omitted,
-the default behaviour is for no filtering to be performed and for all all of
-the files inside the repository to be considered.
+allows you to whittle down targeted files. If this parameter is omitted, the
+default behaviour is for no filtering to be performed and for all of the files
+inside the repository to be considered.
 
 For example, to set the arglist to all tracked files in the repository, use:
 >
