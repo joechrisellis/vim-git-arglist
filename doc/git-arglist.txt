@@ -50,6 +50,10 @@ For each of these contexts, the following variants exist:
 
 - |:ArgEdit...|, which works like the |:argedit| builtin command.
 
+                                                *git-arglist-bang*
+You can give a bang [!] to some of the command variants which will cause the
+plugin to use the corresponding builtin command with a bang.
+
 
 TREEISH COMMANDS                                *git-arglist-treeish-commands*
 
