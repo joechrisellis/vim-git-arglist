@@ -113,29 +113,27 @@ function! g:ConflictedFiles(...)
   return l:paths
 endfunction
 
-function! s:CommandWrapper(...)
+function! s:CommandWrapper(ContextFunction, arglist_cmd, bang, args)
   if !s:InGitRepo()
     echohl ErrorMsg | echo "Not in a git repo!" | echohl None
     return
   endif
 
-  let l:ContextFunction = a:1
-  let l:arglist_cmd = a:2
-  let l:bang = a:3
-  let l:args = a:000[3:]
-  if l:bang
-    let l:arglist_cmd .= "!"
+  let l:args_expanded_list = split(expand(a:args))
+
+  if a:bang
+    let a:arglist_cmd .= "!"
   endif
 
   let l:files = []
   try
-    let l:files = call(l:ContextFunction, l:args)
+    let l:files = call(a:ContextFunction, l:args_expanded_list)
   catch /.*/
     echohl ErrorMsg | echo "Caught error: " . v:exception | echohl None
   endtry
 
   if !empty(l:files)
-    exe l:arglist_cmd . " " . join(l:files, " ")
+    exe a:arglist_cmd . " " . join(l:files, " ")
   else
     echohl WarningMsg | echo "No files found." | echohl None
   endif
@@ -205,6 +203,6 @@ for s:args_cmd_dict_entry in items(s:args_cmd_dict)
 
     let s:cmd = s:prefix . s:context
     let s:flags = join(s:flags_a + s:flags_b, " ")
-    exe "command! " . s:flags . " " . s:cmd . " :call s:CommandWrapper('g:" . s:context . "Files', '" . tolower(s:prefix) . "', <bang>0, <f-args>)"
+    exe "command! " . s:flags . " " . s:cmd . " :call s:CommandWrapper('g:" . s:context . "Files', '" . tolower(s:prefix) . "', <bang>0, <q-args>)"
   endfor
 endfor
